@@ -54,6 +54,48 @@ methodology in more detail on request or in an interview.
 5. **Guardrail verification** — every claim is programmatically checked for
    a valid citation before the report is shown to the user; uncited or
    unsupported claims are rejected rather than displayed.
+## Reliability: knowing what it doesn't know
+
+[#reliability-knowing-what-it-doesnt-know](#reliability-knowing-what-it-doesnt-know)
+
+Most CNN classifiers will confidently produce a diagnosis for literally
+any input — a softmax layer always outputs *some* distribution, even on
+an image nothing like the training data. This system explicitly guards
+against that failure mode rather than trusting the raw model output:
+
+- **Out-of-distribution detection** — before any prediction is trusted,
+the system computes the Mahalanobis distance of the incoming image in
+the model's own 768-dimensional feature space (the layer immediately
+before the final classification head) against a reference distribution
+built from real training MRIs. Inputs that don't resemble anything the
+model was trained on — non-MRI photos, scans in an unfamiliar format —
+are rejected before classification, rather than silently misclassified.
+- **Shrinkage covariance estimation** — the reference feature distribution
+is estimated using Ledoit-Wolf shrinkage rather than a raw covariance
+matrix, since the number of reference samples is close to the feature
+dimensionality; a naive covariance estimate here is numerically unstable
+and produces unreliable distances.
+- **Confidence-aware output** — even for in-distribution scans, low-
+confidence predictions are flagged distinctly rather than presented with
+the same certainty as a high-confidence result, so a hard-to-classify
+case is visibly uncertain instead of silently wrong.
+- **Citation-enforced synthesis with retries** — the LLM report generation
+step is wrapped with retry logic for both malformed JSON output and
+empty/incomplete summaries, and the guardrail node rejects any claim
+lacking a valid citation before the report reaches the user.
+- **Short-circuited pipeline** — when an input is rejected as out-of-
+distribution, the system skips Grad-CAM, retrieval, and LLM synthesis
+entirely rather than running (and paying for) a full pipeline on an
+input it already knows it can't handle.
+
+**Known limitation:** the out-of-distribution check is scoped to the
+specific preprocessing format (skull-stripped, axial-orientation ADNI
+slices) used in training — a real brain MRI in a different orientation
+or preprocessing pipeline may also be flagged as out-of-distribution,
+since the model was never trained to interpret that format either. This
+is a deliberate tradeoff: refusing an unfamiliar input is safer than
+guessing on it.
+
 
 ## Results
 
