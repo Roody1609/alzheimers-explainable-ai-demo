@@ -1,15 +1,17 @@
 # Explainable Alzheimer's Disease Detection — CNN + Grad-CAM + RAG
 
-An explainable AI system that classifies structural MRI scans for signs of
-Alzheimer's disease, then grounds its explanation in cited literature using
-a retrieval-augmented LLM pipeline — built to make a research-grade model's
-reasoning inspectable, not just its output.
+An explainable, safety-aware AI system that classifies structural MRI
+scans for signs of Alzheimer's disease, grounds its explanation in cited
+literature using a retrieval-augmented LLM pipeline, and knows when *not*
+to answer — detecting out-of-distribution inputs in the model's own
+learned feature space rather than guessing on scans it was never trained
+to interpret. Built to make a research-grade model's reasoning
+inspectable and its limitations explicit, not just its output.
 
 **Note:** this repository contains a project overview and demo only. The
-full implementation is private, as this work extends a co-authored research
-paper currently under review — happy to walk through the code and
-methodology in more detail on request or in an interview.
-
+full implementation is private, as this work extends a co-authored
+research paper currently under review — happy to walk through the code
+and methodology in more detail on request or in an interview.
 ---
 
 ## Demo
@@ -108,7 +110,7 @@ guessing on it.
 - **Modeling:** TensorFlow/Keras, EfficientNetB0, Grad-CAM
 - **Orchestration:** LangGraph (StateGraph pipeline with retry logic),
   LangChain
-- **LLM:** Groq (Llama 3.3)
+-- **LLM:** Groq (openai/gpt-oss-120b)
 - **Retrieval:** local vector store over an 8-document corpus, cosine
   similarity search
 - **UI:** Gradio
