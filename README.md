@@ -108,9 +108,11 @@ guessing on it.
 ## Tech stack
 
 - **Modeling:** TensorFlow/Keras, EfficientNetB0, Grad-CAM
+- **Reliability:** Mahalanobis distance out-of-distribution detection,
+  Ledoit-Wolf shrinkage covariance estimation (scikit-learn, SciPy)
 - **Orchestration:** LangGraph (StateGraph pipeline with retry logic),
   LangChain
--- **LLM:** Groq (openai/gpt-oss-120b)
+- **LLM:** Groq (openai/gpt-oss-120b)
 - **Retrieval:** local vector store over an 8-document corpus, cosine
   similarity search
 - **UI:** Gradio
