@@ -14,8 +14,7 @@ methodology in more detail on request or in an interview.
 
 ## Demo
 
-[![Watch the demo](https://img.youtube.com/vi/QEoEnO4NS1g/0.jpg)](https://youtu.be/QEoEnO4NS1g)
-
+[![Watch the demo](https://img.youtube.com/vi/tHHdiRNwX8c/0.jpg)](https://youtu.be/tHHdiRNwX8c)
 *(click the thumbnail to watch — unlisted video)*
 
 ---
